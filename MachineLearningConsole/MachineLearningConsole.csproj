@@ -17,4 +17,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+     <None Update="aprovacao_credito.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
