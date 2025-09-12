@@ -3,8 +3,45 @@ using MachineLearning.Models;
 
 
 // ExemploRegressao();
+// ExemploClassificacaoBinaria();
+ExemploClassificacaoMultiClasse();
 
-ExemploClassificacaoBinaria();
+void ExemploClassificacaoMultiClasse()
+{
+    var trainer = new PerfilAlunoModelTrainer();
+
+    trainer.CarregarDadosCSV(Path.Combine(AppContext.BaseDirectory, "perfil_aluno_idiomas.csv"));
+    trainer.TreinarModelo();
+
+    trainer.AvaliarModelo();
+    trainer.AvaliarMelhorModelo();
+
+    var pathModelo = Path.Combine(AppContext.BaseDirectory, "modelo_treinado_classificacao_multiclasse.zip");
+    trainer.SalvarModelo(pathModelo);
+
+    var predictor = new PerfilAlunoModelPredictor();
+    predictor.CarregarModelo(pathModelo);
+
+    var novoAluno = new PerfilAlunoInputData()
+    {
+        NotaProficienciaGramatical = 6.5f,
+        CompreensaoOral = 7.0f,
+        NotaConversacao = 5.5f
+    };
+
+    var resultado = predictor.Prever(novoAluno);
+
+    Console.WriteLine($"Perfil previsto: {resultado.PerfilPrevisto}");
+
+    Console.WriteLine("Pontuação por perfil:");
+
+    var perfis = new[] { "Iniciante", "Intermediário", "Avançado" };
+
+    for (int cont = 0; cont < resultado.Score.Length; cont++)
+    {
+        Console.WriteLine($"{perfis[cont]}: {resultado.Score[cont]:P2}");
+    }
+}
 
 void ExemploClassificacaoBinaria()
 {
