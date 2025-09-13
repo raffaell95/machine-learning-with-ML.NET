@@ -47,4 +47,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+     <None Update="recomendacoes.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
