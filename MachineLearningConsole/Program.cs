@@ -6,7 +6,37 @@ using MachineLearning.Models;
 // ExemploClassificacaoBinaria();
 // ExemploClassificacaoMultiClasse();
 // ExemploClustering();
-ExemploAnomalias();
+// ExemploAnomalias();
+ExemploTexto();
+
+void ExemploTexto()
+{
+    var trainer = new ComentarioModelTrainer();
+    trainer.CarregarDadosCSV(Path.Combine(AppContext.BaseDirectory, "comentarios.csv"));
+    trainer.TreinarModelo();
+
+    var pathModelo = Path.Combine(AppContext.BaseDirectory, "modelo_texto.zip");
+    trainer.SalvarModelo(pathModelo);
+
+    var predictor = new ComentarioModelPredictor();
+    predictor.CarregarModelo(pathModelo);
+
+    var exemplos = new[]
+    {
+        "Produto otimo, gostei do atendimento",
+        "Demorou demais e chegou com defeito",
+        "Excelente qualidade, muito satisfeito",
+        "Não recomendo, tive uma experiencia ruim"
+    };
+
+    foreach (var texto in exemplos)
+    {
+        var resultado = predictor.Prever(new ComentarioInputData { Comentario = texto });
+        Console.WriteLine($"Comentário: {texto}");
+        Console.WriteLine($"Sentimento: {(resultado.EhPositivo ? "Positivo" : "Negativo")}");
+        Console.WriteLine($"Probabilidade de ser positivo: {resultado.Probability:P1}");
+    }
+}
 
 void ExemploAnomalias()
 {
